@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>穿梭框</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src='js/vue.js'></script>
+    <script src='js/index.js'></script>
+</head>
+
+<body>
+    <div id='my'>
+        <div class="container">
+            <div class="row">
+                <!--左侧-->
+                <div class="col-xs-5 col-sm-5">
+                    <div class="panel panel-success">
+                        <!--标题-->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">列表1<span>2</span></h3>
+                        </div>
+                        <!--内容-->
+                        <div class="panel-body panel-height">
+                            <ul>
+
+                                <li v-for="(data1,index) in data_left">
+                                    <input :value="index" type="checkbox" v-model="check_val_left">
+                                    {{data1.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--中间-->
+                <div class="col-xs-2 col-sm-2 transfer">
+                    <div class="transfer-table">
+                        <a class="transfer-cell" @click="left_move()">>></a>
+                        <a class="transfer-cell" @click="right_move()">
+                            <<< /a>
+                    </div>
+
+                </div>
+                <!--右侧-->
+                <div class="col-xs-5 col-sm-5">
+                    <div class="panel panel-success">
+                        <!--标题-->
+                        <div class="panel-heading">
+                            <h3 class="panel-title">列表2 <span>2</span></h3>
+                        </div>
+                        <!--内容-->
+                        <div class="panel-body panel-height">
+                            <ul>
+                                <li v-for="(data2,index2) in data_right">
+                                    <input :value="index2" type="checkbox" v-model="check_val_right">
+                                    {{data2.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var vue_my = new Vue({
+        el: '#my',
+        data: {
+            data_left: [
+                { id: 1, name: '北京' },
+                { id: 2, name: '上海' },
+                { id: 3, name: '深圳' },
+            ],
+            data_right: [
+                { id: 11, name: '重庆' },
+                { id: 12, name: '成都' },
+                { id: 13, name: '贵州' },
+            ],
+            check_val_left: [],
+            check_val_right: [],
+        },
+        methods: {
+            left_move: function () {
+                //要把这个数组排序
+                this.check_val_left.sort(sortNumber);
+                this.check_val_left.forEach((item, index, array) => {
+                    //执行代码
+                    //console.log(item);
+                    //将data_left对应索引的数据移动到右边去
+                    this.data_right.push(this.data_left[item]);
+                    //console.log(this.data_left);
+                    this.data_left.splice(item, 1);
+                });
+                //忘记把这个数组置空了
+                this.check_val_left = [];
+            },
+            right_move: function () {
+                //console.log(this.check_val_right);
+                this.check_val_right.sort(sortNumber);
+                this.check_val_right.forEach((item, index, array) => {
+                    //执行代码
+                    //console.log(item);
+                    //将data_left对应索引的数据移动到右边去
+                    this.data_left.push(this.data_right[item]);
+                    //console.log(this.data_left);
+                    this.data_right.splice(item, 1);
+                });
+                this.check_val_right = [];
+            }
+        }
+    })
+</script>
+
+<script>
+    function sortNumber(a, b) {
+        return b - a;
+    }
+</script>
+
+</html>
